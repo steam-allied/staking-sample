@@ -1,0 +1,48 @@
+.modal {
+    display: none;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 60%;
+    height: 45%;
+    position: absolute;
+    z-index: 1;
+    box-shadow: -5px 5px var(--blk);
+    border: 2px solid black;
+    margin-left: 20%;
+    background-color: white;
+    top: 30%;
+}
+
+.scroll {
+    width: 35%;
+    height: 13%;
+    font-size: large;
+    color: white;
+    font-weight: bold;
+    background-color: var(--blu);
+    border: none;
+    cursor: pointer;
+}
+
+.scroll:hover {
+    box-shadow: -4px 4px var(--blk);
+}
+
+.close {
+    height: 12%;
+    width: 5%;
+    border: none;
+    background-color: transparent;
+    font-size: large;
+    font-weight: bold;
+    position: absolute;
+    left: 92%;
+    top: 5%;
+    cursor: pointer;
+}
+
+.tx{
+    margin-top: -4%;
+}

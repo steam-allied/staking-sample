@@ -1,0 +1,111 @@
+:root {
+    --blu: rgb(13, 124, 236);
+    --blk: rgb(27, 27, 27);
+}
+
+.App {
+    height: 100vh;
+    width: 100vw;
+}
+
+.FormWrapper {
+    display: flex;
+    border: 1.5px solid black;
+    min-height: 50%;
+    width: 30%;
+    margin-top: 25vh;
+    margin-left: 35vw;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: -10px 15px var(--blk);
+}
+
+form {
+    height: 50vh;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.currency,
+.amount {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 15%;
+}
+
+#amount,
+#currency {
+    background-color:white;
+    height: 100%;
+    border: none;
+    border-bottom: 3px solid var(--blu);
+}
+
+#amount:focus,
+#currency:focus {
+    outline: none;
+    border-bottom: 5px solid var(--blu);
+}
+
+input[type="number"] {
+    appearance: textfield;
+}
+
+.transactions {
+    width: 65%;
+    margin-left: 17.5vw;
+    margin-top: 20vh;
+    margin-bottom: 5vh;
+    box-shadow: -10px 15px var(--blk);
+    border: 1.5px solid black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.transaction {
+    margin-left: 6vw;
+}
+
+.pending {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.spinner {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #4f4f4f;
+    width: 5vw;
+    height: 5vw;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#transact {
+    background-color: var(--blu);
+    border: none;
+    width: 70%;
+    height: 12%;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+#transact:hover {
+    box-shadow: -4px 4px var(--blk);
+}
