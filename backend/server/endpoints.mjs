@@ -20,15 +20,16 @@ app.listen(process.env.API_PORT, () =>
 const PostTxData = () => {
     app.post("/tx-data", (req, res) => {
         DbClient.query(
-            `INSERT INTO transactions(address,amount,content_hash,tx_hash,date,token)
-    VALUES($1,$2,$3,$4,$5,$6) RETURNING*`,
+            `INSERT INTO transactions(address,amount,content_hash,tx_hash,date,token,timestamp)
+    VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING*`,
             [
                 req.body.address,
                 req.body.amount,
                 req.body.ContentHash,
                 req.body.TxHash,
                 req.body.date,
-                req.body.currency
+                req.body.currency,
+                req.body.ts
             ],
             (err, res) => {
                 err ? console.log(err) : console.log(res)

@@ -1,4 +1,4 @@
-import api from "../server/endpoints.mjs"
+import api from "./server/endpoints.mjs"
 
 api.GetTxData()
 api.PostTxData()

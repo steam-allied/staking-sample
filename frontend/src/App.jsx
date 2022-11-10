@@ -6,6 +6,7 @@ import { ethers } from "ethers"
 import recorder from "./ABIs/Recorder.json"
 import token from "./ABIs/Trax.json"
 import Success from "./success"
+import domain from "./config.json"
 import "./App.css"
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
     const [contracts, setContracts] = useState([])
     const [transactions, setTransactions] = useState([])
     const [TxHash, setTxHash] = useState("")
+    const w3 = useRef()
     const ShowPopup = useRef(false)
 
     useEffect(() => {
@@ -37,7 +39,7 @@ function App() {
                     token.networks["11155111"].address
                 )
                 const response = await axios.post(
-                    "http://52.198.224.56:4000/tx-by-address",
+                    `http://${domain.local}:4000/tx-by-address`,
                     {
                         address: accounts[0]
                     }
@@ -49,6 +51,7 @@ function App() {
                 setTransactions(response.data.rows)
                 setAccounts(accounts)
                 setContracts([TxContract, TokenContract])
+                w3.current = web3
             } catch (error) {
                 console.error(error)
             }
@@ -136,9 +139,6 @@ function App() {
     }
 
     const transaction = async () => {
-        console.log("currency", currency)
-        console.log("amount", amount)
-        console.log("address", accounts[0])
         const hash = sha1(
             JSON.stringify({
                 currency,
@@ -146,13 +146,13 @@ function App() {
                 address: accounts[0]
             })
         )
-        console.log("hash", hash)
         let date = new Date()
         date = `${date.getDate().toString()}-${date
             .getMonth()
             .toString()}-${date.getFullYear().toString()}`
-        const res = await axios.get("http://52.198.224.56:4000/latest-tx")
+        const res = await axios.get(`http://${domain.local}:4000/latest-tx`)
         const id = res.data.rows[0].id + 1
+        let TxHash = ""
         contracts[0].methods
             .RecordTransaction(
                 token.networks["11155111"].address,
@@ -167,26 +167,29 @@ function App() {
                     throw err
                 } else {
                     console.log("tx hash", res)
+                    TxHash = res
                     setTxHash(res)
-                    await axios
-                        .post("http://52.198.224.56:4000/tx-data", {
-                            address: accounts[0],
-                            amount,
-                            ContentHash: hash,
-                            TxHash: res,
-                            date,
-                            currency
-                        })
-                        .then((res) => {
-                            console.log(res)
-                        })
                 }
             })
             .on("receipt", async (receipt) => {
                 console.log("successful tx!", receipt)
+                const block = await w3.current.eth.getBlock(receipt.blockNumber)
+                await axios
+                    .post(`http://${domain.local}:4000/tx-data`, {
+                        address: accounts[0],
+                        amount,
+                        ContentHash: hash,
+                        TxHash,
+                        date,
+                        currency,
+                        ts: block.timestamp
+                    })
+                    .then((res) => {
+                        console.log(res)
+                    })
                 ShowPopup.current = true
                 const response = await axios.post(
-                    "http://52.198.224.56:4000/tx-by-address",
+                    `http://${domain.local}:4000/tx-by-address`,
                     {
                         address: accounts[0]
                     }
@@ -266,6 +269,7 @@ function App() {
                             <li>amount: {tx.amount}</li>
                             <li>content hash: {tx.content_hash}</li>
                             <li>date: {tx.date}</li>
+                            <li>timestamp: {tx.timestamp}</li>
                             <li>
                                 data:
                                 {` ${JSON.stringify({
